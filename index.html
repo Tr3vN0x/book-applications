@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aetherfall | Join the Lattice</title>
+    <title>Aetherfall | Character Application</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=IM+Fell+English+SC&family=IM+Fell+DW+Pica:ital@0;1&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     
@@ -40,7 +40,7 @@
             opacity: 0.4; pointer-events: none; z-index: 50;
         }
 
-        /* --- Navigation --- */
+        /* --- Navigation (Updated to match main site) --- */
         nav {
             position: fixed; top: 0; width: 100%; height: var(--nav-height);
             background: rgba(10, 10, 10, 0.95);
@@ -52,6 +52,18 @@
 
         .logo-container { display: flex; align-items: center; gap: 15px; text-decoration: none; }
         .nav-title { color: var(--gold); font-family: 'Cinzel Decorative', serif; font-size: 1.6rem; letter-spacing: 3px; }
+
+        .nav-right { display: flex; align-items: center; gap: 20px; }
+        .discord-btn { 
+            color: var(--discord); 
+            text-decoration: none; 
+            font-weight: 700; 
+            font-family: 'Inter', sans-serif;
+            font-size: 0.8rem; 
+            letter-spacing: 1px;
+            transition: 0.3s;
+        }
+        .discord-btn:hover { text-shadow: 0 0 10px rgba(88, 101, 242, 0.6); }
 
         /* --- The Grimoire Layout --- */
         .grimoire-container {
@@ -72,12 +84,11 @@
             border-radius: 4px;
             display: grid;
             grid-template-columns: 1fr 1fr;
-            min-height: 700px;
+            min-height: 750px;
             position: relative;
             box-shadow: inset 0 0 50px rgba(0,0,0,0.2);
         }
 
-        /* Spine Shadow */
         .book-pages::after {
             content: "";
             position: absolute; top: 0; left: 50%; width: 40px; height: 100%;
@@ -92,10 +103,10 @@
         h1, h2 { font-family: 'Cinzel Decorative', serif; color: #111; margin-bottom: 20px; }
         .section-label { font-family: 'IM Fell English SC', serif; color: var(--gold); display: block; margin-bottom: 10px; }
 
-        .input-group { margin-bottom: 20px; }
+        .input-group { margin-bottom: 20px; position: relative; }
         label { display: block; font-family: 'IM Fell English SC', serif; font-size: 1.1rem; margin-bottom: 5px; }
 
-        input, select, textarea {
+        input, textarea {
             width: 100%;
             padding: 12px;
             background: rgba(0,0,0,0.03);
@@ -108,6 +119,15 @@
 
         input:focus, textarea:focus { background: #fff; border-color: #111; }
 
+        .char-counter {
+            font-size: 0.8rem;
+            font-family: 'Inter', sans-serif;
+            position: absolute;
+            right: 0;
+            bottom: -22px;
+            color: #777;
+        }
+
         .btn-submit {
             width: 100%;
             padding: 15px;
@@ -118,7 +138,7 @@
             font-size: 1.2rem;
             cursor: pointer;
             transition: 0.3s;
-            margin-top: 20px;
+            margin-top: 30px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
 
@@ -128,7 +148,7 @@
         .admin-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             margin-top: 20px;
             font-family: 'Inter', sans-serif;
         }
@@ -148,7 +168,8 @@
         <span class="nav-title">AETHERFALL</span>
     </a>
     <div class="nav-right">
-        <button class="btn-outline" id="authBtn" style="background:none; border:1px solid var(--gold); color:var(--gold); padding:5px 15px; cursor:pointer;">OWNER LOGIN</button>
+        <a href="https://discord.gg/yq2DdHhG" target="_blank" class="discord-btn">JOIN DISCORD</a>
+        <button class="btn-outline" id="authBtn" style="background:none; border:1px solid var(--gold); color:var(--gold); padding:5px 15px; cursor:pointer; font-family: 'Inter'; font-size: 0.7rem; font-weight: bold;">OWNER LOGIN</button>
     </div>
 </nav>
 
@@ -156,51 +177,42 @@
     <div class="book-pages">
         
         <div class="page left-page">
-            <span class="section-label">THE RECRUITMENT RITE</span>
-            <h1>Join the Book</h1>
-            <p style="margin-bottom: 30px; font-style: italic; opacity: 0.8;">"Your story is a shard of the Aether. Help us weave the final tapestry."</p>
+            <span class="section-label">THE CHRONICLE OF SOULS</span>
+            <h1>Character Entry</h1>
+            <p style="margin-bottom: 30px; font-style: italic; opacity: 0.8;">"Ink your existence into the Aether. Every hero leaves a mark."</p>
 
             <form id="appForm">
                 <div class="input-group">
-                    <label>Your Alias / Name</label>
-                    <input type="text" id="app_name" placeholder="How shall we address you?" required>
+                    <label>Author Alias / Social @</label>
+                    <input type="text" id="app_social" placeholder="@username or DiscordTag" required>
                 </div>
 
                 <div class="input-group">
-                    <label>Contact (Social Media @ / Discord)</label>
-                    <input type="text" id="app_social" placeholder="@username or DiscordTag#0000" required>
+                    <label>Character Name</label>
+                    <input type="text" id="app_name" placeholder="Name of your protagonist" required>
                 </div>
 
                 <div class="input-group">
-                    <label>Desired Role</label>
-                    <select id="app_role">
-                        <option value="Writer">Scribe (Writer)</option>
-                        <option value="Artist">Illuminator (Artist)</option>
-                        <option value="Lore">Architect (Lore Builder)</option>
-                        <option value="Beta Reader">Seeker (Beta Reader)</option>
-                    </select>
+                    <label>Character Summary</label>
+                    <textarea id="app_sample" rows="6" placeholder="Describe their origins, powers, and destiny..." required></textarea>
+                    <div class="char-counter" id="counter">Characters: 0 / 100 minimum</div>
                 </div>
 
-                <div class="input-group">
-                    <label>Your Offering (Reason/Portfolio)</label>
-                    <textarea id="app_sample" rows="4" placeholder="Why do you wish to enter Aetherfall?" required></textarea>
-                </div>
-
-                <button type="submit" class="btn-submit">SEAL THE CONTRACT</button>
+                <button type="submit" class="btn-submit">SUBMIT TO THE ARCHITECTS</button>
             </form>
         </div>
 
         <div class="page right-page">
             <div id="admin_content" style="display: none;">
-                <span class="section-label">ARCHITECT'S VIEW</span>
-                <h1>Applicants</h1>
-                <div id="applicant_list">
+                <span class="section-label">THE LATTICE COMMAND</span>
+                <h1>Pending Souls</h1>
+                <div id="applicant_list" style="overflow-x: auto;">
                     <table class="admin-table">
                         <thead>
                             <tr>
-                                <th>Name</th>
-                                <th>Social</th>
-                                <th>Role</th>
+                                <th>Author</th>
+                                <th>Character</th>
+                                <th>Summary</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -210,16 +222,16 @@
             </div>
 
             <div id="guest_content">
-                <span class="section-label">THE LATTICE GUIDELINES</span>
+                <span class="section-label">ENTRY REQUIREMENTS</span>
                 <h2>Instructions</h2>
-                <ul style="margin-left: 20px; line-height: 2;">
-                    <li>Ensure your social handles are correct so we may reach you.</li>
-                    <li>Be descriptive in your "Offering" section.</li>
-                    <li>Submissions are reviewed by the Architects weekly.</li>
-                    <li>Check the Discord for status updates.</li>
+                <ul style="margin-left: 20px; line-height: 2; margin-top: 20px;">
+                    <li>Provide a valid <strong>Social @</strong> so we can contact you regarding acceptance.</li>
+                    <li>Your <strong>Character Summary</strong> must be vivid and detailed.</li>
+                    <li>The summary requires a <strong>minimum of 100 characters</strong> to pass the rite.</li>
+                    <li>Architects review all souls once a week.</li>
                 </ul>
-                <div style="margin-top: 40px; text-align: center;">
-                    <img src="https://www.pngall.com/wp-content/uploads/2016/03/Compass-Gold-PNG.png" style="width: 150px; opacity: 0.2;" alt="seal">
+                <div style="margin-top: 60px; text-align: center;">
+                    <img src="https://www.pngall.com/wp-content/uploads/2016/03/Compass-Gold-PNG.png" style="width: 180px; opacity: 0.15; filter: sepia(1);" alt="seal">
                 </div>
             </div>
         </div>
@@ -246,25 +258,42 @@
     const db = getFirestore(app);
     const ADMIN_UID = "RJUAtLpVpoacDbdYORcUiSIU20v2";
 
-    // 1. Submit Application Logic
+    // --- Character Counter Logic ---
+    const textarea = document.getElementById('app_sample');
+    const counter = document.getElementById('counter');
+    
+    textarea.addEventListener('input', () => {
+        const len = textarea.value.length;
+        counter.innerText = `Characters: ${len} / 100 minimum`;
+        counter.style.color = len >= 100 ? "#b59410" : "#cc0000";
+    });
+
+    // 1. Submit Character Application
     document.getElementById('appForm').onsubmit = async (e) => {
         e.preventDefault();
+        const summary = document.getElementById('app_sample').value;
+
+        if(summary.length < 100) {
+            alert("Your character summary is too brief. Please expand your story to at least 100 characters.");
+            return;
+        }
+
         const data = {
-            name: document.getElementById('app_name').value,
             social: document.getElementById('app_social').value,
-            role: document.getElementById('app_role').value,
-            sample: document.getElementById('app_sample').value,
+            char_name: document.getElementById('app_name').value,
+            summary: summary,
             createdAt: serverTimestamp()
         };
 
         try {
-            await addDoc(collection(db, "applications"), data);
-            alert("Your contract has been sealed. We will contact you soon.");
+            await addDoc(collection(db, "character_apps"), data);
+            alert("Your character has been submitted to the Grimoire.");
             document.getElementById('appForm').reset();
+            counter.innerText = "Characters: 0 / 100 minimum";
         } catch (err) { alert("The Aether is unstable. Try again later."); }
     };
 
-    // 2. Admin Real-time Listener
+    // 2. Admin View
     onAuthStateChanged(auth, (u) => {
         const isAdmin = u?.uid === ADMIN_UID;
         document.getElementById('admin_content').style.display = isAdmin ? "block" : "none";
@@ -272,16 +301,16 @@
         document.getElementById('authBtn').innerText = u ? "LOGOUT" : "OWNER LOGIN";
 
         if (isAdmin) {
-            onSnapshot(query(collection(db, "applications"), orderBy("createdAt", "desc")), (snap) => {
+            onSnapshot(query(collection(db, "character_apps"), orderBy("createdAt", "desc")), (snap) => {
                 const tbody = document.getElementById('app_table_body');
                 tbody.innerHTML = "";
                 snap.forEach(docSnap => {
                     const app = docSnap.data();
                     tbody.innerHTML += `
                         <tr>
-                            <td>${app.name}</td>
                             <td style="color:var(--gold)">${app.social}</td>
-                            <td>${app.role}</td>
+                            <td><strong>${app.char_name}</strong></td>
+                            <td><div style="max-height:60px; overflow-y:auto; width:150px;">${app.summary}</div></td>
                             <td><button onclick="window.deleteApp('${docSnap.id}')" style="color:red; border:none; background:none; cursor:pointer;">[X]</button></td>
                         </tr>
                     `;
@@ -291,15 +320,14 @@
     });
 
     window.deleteApp = async (id) => {
-        if(confirm("Delete this application?")) await deleteDoc(doc(db, "applications", id));
+        if(confirm("Erase this character entry?")) await deleteDoc(doc(db, "character_apps", id));
     }
 
-    // Login Logic
     document.getElementById('authBtn').onclick = () => {
         if(auth.currentUser) signOut(auth);
         else {
-            const e = prompt("Email:"), p = prompt("Password:");
-            if(e && p) signInWithEmailAndPassword(auth, e, p).catch(() => alert("Denied."));
+            const e = prompt("Architect Email:"), p = prompt("Passkey:");
+            if(e && p) signInWithEmailAndPassword(auth, e, p).catch(() => alert("Access Denied."));
         }
     };
 </script>
