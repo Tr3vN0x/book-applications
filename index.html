@@ -3,39 +3,305 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aetherfall | Application</title>
+    <title>Aetherfall | Join the Lattice</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=IM+Fell+English+SC&family=IM+Fell+DW+Pica:ital@0;1&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    
     <style>
-        :root { --bg: #0b0e14; --card: #151921; --accent: #7289da; --text: #ffffff; }
-        body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .container { background: var(--card); padding: 30px; border-radius: 12px; width: 90%; max-width: 450px; border-top: 4px solid var(--accent); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        h2 { text-align: center; margin-bottom: 20px; }
-        input, textarea, select { width: 100%; padding: 12px; margin: 10px 0; background: #1c222d; border: 1px solid #2d343f; color: white; border-radius: 6px; box-sizing: border-box; }
-        button { width: 100%; padding: 12px; background: var(--accent); border: none; color: white; font-weight: bold; border-radius: 6px; cursor: pointer; transition: 0.3s; }
-        button:hover { background: #5b6eae; }
-        .admin-link { display: block; text-align: center; margin-top: 15px; color: #555; text-decoration: none; font-size: 0.8em; }
+        :root {
+            --page-bg: #fdfaf3;
+            --ink: #1c1917;
+            --gold: #b59410;
+            --gold-dim: rgba(181, 148, 16, 0.2);
+            --binding: #3f1d0b;
+            --void: #030303;
+            --discord: #5865F2;
+            --nav-height: 70px;
+            --book-max-width: 1200px;
+        }
+
+        * { margin:0; padding:0; box-sizing:border-box; outline: none; }
+        
+        body { 
+            background-color: var(--void);
+            color: var(--ink); 
+            font-family: 'IM Fell DW Pica', serif;
+            font-size: 18px;
+            line-height: 1.7;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        body::before {
+            content: "";
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url('https://www.transparenttextures.com/patterns/handmade-paper.png');
+            opacity: 0.4; pointer-events: none; z-index: 50;
+        }
+
+        /* --- Navigation --- */
+        nav {
+            position: fixed; top: 0; width: 100%; height: var(--nav-height);
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid var(--gold);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 40px; z-index: 1000;
+        }
+
+        .logo-container { display: flex; align-items: center; gap: 15px; text-decoration: none; }
+        .nav-title { color: var(--gold); font-family: 'Cinzel Decorative', serif; font-size: 1.6rem; letter-spacing: 3px; }
+
+        /* --- The Grimoire Layout --- */
+        .grimoire-container {
+            flex: 1;
+            width: 95%;
+            max-width: var(--book-max-width);
+            margin: calc(var(--nav-height) + 40px) auto 60px;
+            background-color: var(--binding);
+            background-image: url('https://www.transparenttextures.com/patterns/dark-leather.png');
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 30px 70px rgba(0,0,0,0.8);
+        }
+
+        .book-pages {
+            background-color: var(--page-bg);
+            background-image: url('https://www.transparenttextures.com/patterns/old-paper.png');
+            border-radius: 4px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 700px;
+            position: relative;
+            box-shadow: inset 0 0 50px rgba(0,0,0,0.2);
+        }
+
+        /* Spine Shadow */
+        .book-pages::after {
+            content: "";
+            position: absolute; top: 0; left: 50%; width: 40px; height: 100%;
+            background: linear-gradient(to right, transparent, rgba(0,0,0,0.1), transparent);
+            transform: translateX(-50%);
+        }
+
+        .page { padding: 50px; }
+        .left-page { border-right: 1px solid rgba(0,0,0,0.1); }
+
+        /* --- Form Styling --- */
+        h1, h2 { font-family: 'Cinzel Decorative', serif; color: #111; margin-bottom: 20px; }
+        .section-label { font-family: 'IM Fell English SC', serif; color: var(--gold); display: block; margin-bottom: 10px; }
+
+        .input-group { margin-bottom: 20px; }
+        label { display: block; font-family: 'IM Fell English SC', serif; font-size: 1.1rem; margin-bottom: 5px; }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            background: rgba(0,0,0,0.03);
+            border: 1px solid rgba(0,0,0,0.1);
+            border-bottom: 2px solid var(--gold);
+            font-family: 'IM Fell DW Pica', serif;
+            font-size: 1.1rem;
+            color: var(--ink);
+        }
+
+        input:focus, textarea:focus { background: #fff; border-color: #111; }
+
+        .btn-submit {
+            width: 100%;
+            padding: 15px;
+            background: var(--gold);
+            color: white;
+            border: none;
+            font-family: 'Cinzel Decorative', serif;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .btn-submit:hover { background: #8e740d; transform: scale(1.02); }
+
+        /* Admin Table Styles */
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+            margin-top: 20px;
+            font-family: 'Inter', sans-serif;
+        }
+        .admin-table th { background: var(--gold); color: white; padding: 10px; text-align: left; }
+        .admin-table td { padding: 10px; border-bottom: 1px solid #ddd; }
+
+        @media (max-width: 900px) {
+            .book-pages { grid-template-columns: 1fr; }
+            .book-pages::after { display: none; }
+        }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h2>Join Aetherfall</h2>
-    <form action="process.php?action=submit" method="POST">
-        <input type="text" name="username" placeholder="Full Name / Alias" required>
-        <input type="email" name="email" placeholder="Email Address" required>
-        <input type="text" name="social" placeholder="Social Media (@handle / Discord)" required>
-        
-        <label>Role</label>
-        <select name="role">
-            <option value="Writer">Writer</option>
-            <option value="Artist">Artist</option>
-            <option value="Lore Master">Lore Master</option>
-        </select>
+<nav>
+    <a href="index.html" class="logo-container">
+        <span class="nav-title">AETHERFALL</span>
+    </a>
+    <div class="nav-right">
+        <button class="btn-outline" id="authBtn" style="background:none; border:1px solid var(--gold); color:var(--gold); padding:5px 15px; cursor:pointer;">OWNER LOGIN</button>
+    </div>
+</nav>
 
-        <textarea name="sample" rows="4" placeholder="Why do you want to join Aetherfall?" required></textarea>
-        <button type="submit">Submit Application</button>
-    </form>
-    <a href="process.php?action=login_page" class="admin-link">Owner Login</a>
+<div class="grimoire-container">
+    <div class="book-pages">
+        
+        <div class="page left-page">
+            <span class="section-label">THE RECRUITMENT RITE</span>
+            <h1>Join the Book</h1>
+            <p style="margin-bottom: 30px; font-style: italic; opacity: 0.8;">"Your story is a shard of the Aether. Help us weave the final tapestry."</p>
+
+            <form id="appForm">
+                <div class="input-group">
+                    <label>Your Alias / Name</label>
+                    <input type="text" id="app_name" placeholder="How shall we address you?" required>
+                </div>
+
+                <div class="input-group">
+                    <label>Contact (Social Media @ / Discord)</label>
+                    <input type="text" id="app_social" placeholder="@username or DiscordTag#0000" required>
+                </div>
+
+                <div class="input-group">
+                    <label>Desired Role</label>
+                    <select id="app_role">
+                        <option value="Writer">Scribe (Writer)</option>
+                        <option value="Artist">Illuminator (Artist)</option>
+                        <option value="Lore">Architect (Lore Builder)</option>
+                        <option value="Beta Reader">Seeker (Beta Reader)</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label>Your Offering (Reason/Portfolio)</label>
+                    <textarea id="app_sample" rows="4" placeholder="Why do you wish to enter Aetherfall?" required></textarea>
+                </div>
+
+                <button type="submit" class="btn-submit">SEAL THE CONTRACT</button>
+            </form>
+        </div>
+
+        <div class="page right-page">
+            <div id="admin_content" style="display: none;">
+                <span class="section-label">ARCHITECT'S VIEW</span>
+                <h1>Applicants</h1>
+                <div id="applicant_list">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Social</th>
+                                <th>Role</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="app_table_body"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="guest_content">
+                <span class="section-label">THE LATTICE GUIDELINES</span>
+                <h2>Instructions</h2>
+                <ul style="margin-left: 20px; line-height: 2;">
+                    <li>Ensure your social handles are correct so we may reach you.</li>
+                    <li>Be descriptive in your "Offering" section.</li>
+                    <li>Submissions are reviewed by the Architects weekly.</li>
+                    <li>Check the Discord for status updates.</li>
+                </ul>
+                <div style="margin-top: 40px; text-align: center;">
+                    <img src="https://www.pngall.com/wp-content/uploads/2016/03/Compass-Gold-PNG.png" style="width: 150px; opacity: 0.2;" alt="seal">
+                </div>
+            </div>
+        </div>
+
+    </div>
 </div>
 
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyDvY6EBbx55sK3F5ovjWDGexG9N58WXS-4",
+        authDomain: "aetherfall-d35a2.firebaseapp.com",
+        projectId: "aetherfall-d35a2",
+        storageBucket: "aetherfall-d35a2.firebasestorage.app",
+        messagingSenderId: "107057087956",
+        appId: "1:107057087956:web:cd958bc57a400502d1c241"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const ADMIN_UID = "RJUAtLpVpoacDbdYORcUiSIU20v2";
+
+    // 1. Submit Application Logic
+    document.getElementById('appForm').onsubmit = async (e) => {
+        e.preventDefault();
+        const data = {
+            name: document.getElementById('app_name').value,
+            social: document.getElementById('app_social').value,
+            role: document.getElementById('app_role').value,
+            sample: document.getElementById('app_sample').value,
+            createdAt: serverTimestamp()
+        };
+
+        try {
+            await addDoc(collection(db, "applications"), data);
+            alert("Your contract has been sealed. We will contact you soon.");
+            document.getElementById('appForm').reset();
+        } catch (err) { alert("The Aether is unstable. Try again later."); }
+    };
+
+    // 2. Admin Real-time Listener
+    onAuthStateChanged(auth, (u) => {
+        const isAdmin = u?.uid === ADMIN_UID;
+        document.getElementById('admin_content').style.display = isAdmin ? "block" : "none";
+        document.getElementById('guest_content').style.display = isAdmin ? "none" : "block";
+        document.getElementById('authBtn').innerText = u ? "LOGOUT" : "OWNER LOGIN";
+
+        if (isAdmin) {
+            onSnapshot(query(collection(db, "applications"), orderBy("createdAt", "desc")), (snap) => {
+                const tbody = document.getElementById('app_table_body');
+                tbody.innerHTML = "";
+                snap.forEach(docSnap => {
+                    const app = docSnap.data();
+                    tbody.innerHTML += `
+                        <tr>
+                            <td>${app.name}</td>
+                            <td style="color:var(--gold)">${app.social}</td>
+                            <td>${app.role}</td>
+                            <td><button onclick="window.deleteApp('${docSnap.id}')" style="color:red; border:none; background:none; cursor:pointer;">[X]</button></td>
+                        </tr>
+                    `;
+                });
+            });
+        }
+    });
+
+    window.deleteApp = async (id) => {
+        if(confirm("Delete this application?")) await deleteDoc(doc(db, "applications", id));
+    }
+
+    // Login Logic
+    document.getElementById('authBtn').onclick = () => {
+        if(auth.currentUser) signOut(auth);
+        else {
+            const e = prompt("Email:"), p = prompt("Password:");
+            if(e && p) signInWithEmailAndPassword(auth, e, p).catch(() => alert("Denied."));
+        }
+    };
+</script>
 </body>
 </html>
