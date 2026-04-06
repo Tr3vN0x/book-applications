@@ -1,1 +1,201 @@
+<?php
+session_start();
 
+// --- 1. DATABASE CONNECTION ---
+// Update these credentials if your host uses a password or different user
+$conn = new mysqli("localhost", "root", "", "aetherfall_db");
+
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// --- 2. LOGIC: HANDLING FORM SUBMISSION ---
+$message = "";
+if (isset($_POST['submit_application'])) {
+    $user = $conn->real_escape_string($_POST['username']);
+    $email = $conn->real_escape_string($_POST['email']);
+    $social = $conn->real_escape_string($_POST['social']);
+    $role = $conn->real_escape_string($_POST['role']);
+    $sample = $conn->real_escape_string($_POST['sample']);
+
+    $sql = "INSERT INTO applications (username, email, social_handle, role_requested, writing_sample) 
+            VALUES ('$user', '$email', '$social', '$role', '$sample')";
+
+    if ($conn->query($sql)) {
+        $message = "<p style='color: #4dfa6d; text-align: center;'>Application submitted successfully!</p>";
+    } else {
+        $message = "<p style='color: #ff4d6d;'>Error: " . $conn->error . "</p>";
+    }
+}
+
+// --- 3. LOGIC: ADMIN LOGIN/LOGOUT ---
+if (isset($_POST['admin_login'])) {
+    // For security, 'admin123' should be a hashed password in a real DB
+    if ($_POST['admin_user'] === 'owner' && $_POST['admin_pass'] === 'admin123') {
+        $_SESSION['admin'] = true;
+    } else {
+        $message = "<p style='color: #ff4d6d; text-align: center;'>Invalid Admin Credentials</p>";
+    }
+}
+
+if (isset($_GET['logout'])) {
+    session_destroy();
+    header("Location: index.php");
+    exit();
+}
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aetherfall | Portal</title>
+    <style>
+        :root {
+            --bg: #0b0e14;
+            --card: #151921;
+            --accent: #7289da;
+            --text: #ffffff;
+            --input: #1c222d;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 600px;
+            background: var(--card);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            margin-top: 50px;
+            border-top: 4px solid var(--accent);
+        }
+
+        h1, h2 { text-align: center; margin-bottom: 20px; }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            background: var(--input);
+            border: 1px solid #2d343f;
+            color: white;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: var(--accent);
+            border: none;
+            color: white;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        button:hover { opacity: 0.8; }
+
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 0.9em;
+        }
+
+        .admin-table th, .admin-table td {
+            padding: 12px;
+            border-bottom: 1px solid #2d343f;
+            text-align: left;
+        }
+
+        .nav { margin-top: 20px; font-size: 0.8em; }
+        .nav a { color: #555; text-decoration: none; }
+    </style>
+</head>
+<body>
+
+    <?php echo $message; ?>
+
+    <?php if (isset($_GET['view']) && $_GET['view'] === 'admin'): ?>
+        
+        <div class="container" style="max-width: 1000px;">
+            <?php if (!isset($_SESSION['admin'])): ?>
+                <h2>Owner Login</h2>
+                <form method="POST">
+                    <input type="text" name="admin_user" placeholder="Username" required>
+                    <input type="password" name="admin_pass" placeholder="Password" required>
+                    <button name="admin_login">Login to Dashboard</button>
+                </form>
+            <?php else: ?>
+                <h2>Aetherfall Applications</h2>
+                <div style="overflow-x: auto;">
+                    <table class="admin-table">
+                        <tr>
+                            <th>User</th>
+                            <th>Email</th>
+                            <th>Socials (@)</th>
+                            <th>Role</th>
+                            <th>About/Sample</th>
+                        </tr>
+                        <?php
+                        $res = $conn->query("SELECT * FROM applications ORDER BY id DESC");
+                        while ($row = $res->fetch_assoc()) {
+                            echo "<tr>
+                                <td>".htmlspecialchars($row['username'])."</td>
+                                <td>".htmlspecialchars($row['email'])."</td>
+                                <td style='color: var(--accent)'>".htmlspecialchars($row['social_handle'])."</td>
+                                <td>".htmlspecialchars($row['role_requested'])."</td>
+                                <td>".htmlspecialchars($row['writing_sample'])."</td>
+                            </tr>";
+                        }
+                        ?>
+                    </table>
+                </div>
+                <br>
+                <a href="?logout=1" style="color: #ff4d6d;">Logout</a>
+            <?php endif; ?>
+            <p class="nav"><a href="index.php">Back to Application</a></p>
+        </div>
+
+    <?php else: ?>
+
+        <div class="container">
+            <h1>Aetherfall</h1>
+            <p style="text-align: center; color: #888;">Apply to be a part of the official book project.</p>
+            <form method="POST">
+                <input type="text" name="username" placeholder="Your Name / Alias" required>
+                <input type="email" name="email" placeholder="Email Address" required>
+                <input type="text" name="social" placeholder="Social Media (e.g. Discord Tag, @Twitter)" required>
+                
+                <label>Desired Role:</label>
+                <select name="role">
+                    <option value="Writer">Writer / Editor</option>
+                    <option value="Artist">Illustrator / Artist</option>
+                    <option value="Lore">Lore Designer</option>
+                </select>
+
+                <textarea name="sample" rows="6" placeholder="Tell us about yourself or provide a link to your work..." required></textarea>
+                
+                <button type="submit" name="submit_application">Send Application</button>
+            </form>
+            <p class="nav"><a href="?view=admin">Owner Login</a></p>
+        </div>
+
+    <?php endif; ?>
+
+</body>
+</html>
